@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazor.Web.Components.Account
+@inject NavigationManager NavigationManager 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inherits LayoutComponentBase
 
 <div class="page">
     <div class="sidebar">
@@ -7,6 +10,16 @@
 
     <main>
         <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <p>Hello, @context.User.Identity?.Name!</p>
+                    <a href="/login" @onclick="(() => Logout())">Manage your account</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="/Register">Register</a>
+                    <a href="/Login">Log in</a>
+                </NotAuthorized>
+            </AuthorizeView>
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
@@ -21,3 +34,11 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code{
+    private async Task Logout()
+    {
+        await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        NavigationManager.NavigateTo("/");
+    }
+}

@@ -3,7 +3,7 @@ using Blazor.Web.Components.Account;
 using Blazor.Web.Data;
 using Blazor.Web.Models;
 using Blazor.Web.Services;
-using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +27,9 @@ namespace Blazor.Web
                 })
                 .AddIdentityCookies();
 
-            //builder.Services.AddCascadingAuthenticationState();
-            //builder.Services.AddScoped<IdentityUserAccessor>();
-            //builder.Services.AddScoped<IdentityRedirectManager>();
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddScoped<IdentityUserAccessor>();
+            builder.Services.AddScoped<IdentityRedirectManager>();
 
             var appSettingSection = builder.Configuration.GetSection("AppSettings");
             builder.Services.Configure<AppSettings>(appSettingSection);
@@ -38,8 +38,12 @@ namespace Blazor.Web
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
-            // Register Blazored.LocalStorage
-            builder.Services.AddBlazoredLocalStorage();
+            // Register Blazored.LocalStorage if you want a long term login
+            //builder.Services.AddBlazoredLocalStorage();
+
+            // Register Blazored.SessionStorage if you want a short term login
+            builder.Services.AddBlazoredSessionStorage();
+
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>

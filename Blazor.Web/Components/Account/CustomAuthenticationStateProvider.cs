@@ -1,6 +1,6 @@
 ﻿using Blazor.Web.Models;
 using Blazor.Web.Services;
-using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
@@ -8,13 +8,14 @@ namespace Blazor.Web.Components.Account
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
-        public ILocalStorageService _localStorageService { get; }
+        //public ILocalStorageService _localStorageService { get; }
+        public ISessionStorageService _sessionStorageService { get; }
         public IUserService _userService { get; set; }
         private readonly HttpClient _httpClient;
 
-        public CustomAuthenticationStateProvider(ILocalStorageService localStorageService, IUserService userService, HttpClient httpClient)
+        public CustomAuthenticationStateProvider(ISessionStorageService sessionStorageService, IUserService userService, HttpClient httpClient)
         {
-            _localStorageService = localStorageService;
+            _sessionStorageService = sessionStorageService;
             _userService = userService;
             _httpClient = httpClient;
         }
@@ -22,7 +23,7 @@ namespace Blazor.Web.Components.Account
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
 
-            var accessToken = await _localStorageService.GetItemAsync<string>("accessToken");
+            var accessToken = await _sessionStorageService.GetItemAsync<string>("accessToken");
 
             ClaimsIdentity identity;
 
@@ -43,8 +44,8 @@ namespace Blazor.Web.Components.Account
 
         public async Task MarkUserAsAuthenticated(User user)
         {
-            await _localStorageService.SetItemAsync("accessToken", user.AccessToken);
-            await _localStorageService.SetItemAsync("refreshToken", user.RefreshToken);
+            await _sessionStorageService.SetItemAsync("accessToken", user.AccessToken);
+            await _sessionStorageService.SetItemAsync("refreshToken", user.RefreshToken);
 
             var identity = GetClaimsIdentity(user);
 
@@ -55,8 +56,8 @@ namespace Blazor.Web.Components.Account
 
         public async Task MarkUserAsLoggedOut()
         {
-            await _localStorageService.RemoveItemAsync("refreshToken");
-            await _localStorageService.RemoveItemAsync("accessToken");
+            await _sessionStorageService.RemoveItemAsync("refreshToken");
+            await _sessionStorageService.RemoveItemAsync("accessToken");
 
             var identity = new ClaimsIdentity();
 

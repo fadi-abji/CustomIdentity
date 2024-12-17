@@ -2,6 +2,6 @@
 {
     public class AppSettings
     {
-        public string BookStoresBaseAddress { get; set; }
+        public string BaseAddress { get; set; }
     }
 }

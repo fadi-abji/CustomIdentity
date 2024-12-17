@@ -14,12 +14,14 @@ namespace Blazor.Web.Components.Account
 
         public CustomAuthenticationStateProvider(ILocalStorageService localStorageService, IUserService userService, HttpClient httpClient)
         {
+            _localStorageService = localStorageService;
             _userService = userService;
             _httpClient = httpClient;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+
             var accessToken = await _localStorageService.GetItemAsync<string>("accessToken");
 
             ClaimsIdentity identity;

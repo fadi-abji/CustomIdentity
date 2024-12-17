@@ -7,13 +7,10 @@
 @using Microsoft.AspNetCore.Identity
 @using Blazor.Web.Data
 
-@* @inject SignInManager<ApplicationUser> SignInManager *@
-@* @inject ILogger<Login> Logger *@
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
-
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IUserService userService
 
 <PageTitle>Log in</PageTitle>
 
@@ -70,37 +67,7 @@
 </div>
 
 @code {
-    private User user;
-    public string LoginMesssage { get; set; }
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationStateTask { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (HttpMethods.IsGet(HttpContext.Request.Method))
-        {
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        }
-    }
-
-
-    private async Task LoginUser()
-    {
-        var returnedUser = await userService.LoginAsync(user);
-        if (returnedUser.EmailAddress != null)
-        {
-            await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(returnedUser);
-            NavigationManager.NavigateTo("/index");
-        }
-        else
-        {
-            LoginMesssage = "Invalid username or password";
-        }
-
-        return await Task.FromResult(true);
-    }
-
+   
     private string? errorMessage;
 
     [CascadingParameter]

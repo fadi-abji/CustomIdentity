@@ -13,7 +13,7 @@ namespace Blazor.Web.Services
         {
             _appSettings = appSettings.Value;
 
-            httpClient.BaseAddress = new Uri(_appSettings.BookStoresBaseAddress);
+            httpClient.BaseAddress = new Uri(_appSettings.BaseAddress);
             httpClient.DefaultRequestHeaders.Add("User-Agent", "BlazorServer");
 
             _httpClient = httpClient;
@@ -38,7 +38,6 @@ namespace Blazor.Web.Services
             var returnedUser = JsonConvert.DeserializeObject<User>(responseBody);
 
             return await Task.FromResult(returnedUser);
-
         }
 
         public async Task<User> RegisterUserAsync(User user)

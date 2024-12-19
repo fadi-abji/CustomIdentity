@@ -1,10 +1,10 @@
-﻿@page "/Login"
-
+﻿@page "/"
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject ISessionStorageService sessionStorageService
 @inject IUserService userService
 @inject IJSRuntime jSRuntime
+@layout LoginLayout
 @rendermode InteractiveServer
 
 <PageTitle>Log in</PageTitle>

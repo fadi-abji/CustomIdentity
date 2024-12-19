@@ -1,33 +1,35 @@
 ﻿@using Blazor.Web.Components.Account
-@inject NavigationManager NavigationManager 
+@using Blazor.Web.Components.Pages.LoginPages
+@inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
+<AuthorizeView>
+    <Authorized>
+        <div class="page">
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+            <main>
+                <div class="top-row px-4">
                     <p>Hello, @context.User.Identity?.Name!</p>
                     <a href="/login" @onclick="(() => Logout())">Manage your account</a>
-                </Authorized>
-                <NotAuthorized>
-                    <a href="/Register">Register</a>
-                    <a href="/Login">Log in</a>
-                </NotAuthorized>
-            </AuthorizeView>
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+                </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </div>
+    </Authorized>
+    <NotAuthorized >
+        <LayoutView Layout="typeof(LoginLayout)">
+            <CustomLogin></CustomLogin>
+        </LayoutView>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -35,7 +37,7 @@
     <a class="dismiss">🗙</a>
 </div>
 
-@code{
+@code {
     private async Task Logout()
     {
         await ((CustomAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();

@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/home"
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
@@ -7,12 +7,3 @@
 
 Welcome to your new app.
  *@
-
- <AuthorizeView>
-     <Authorized>
-        <p> @context.User.Identity?.Name</p>
-     </Authorized>
-     <NotAuthorized>
-         <p>You're not authorized to view this page.</p>   
-     </NotAuthorized>
- </AuthorizeView>

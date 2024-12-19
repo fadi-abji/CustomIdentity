@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject ISessionStorageService sessionStorageService
 @inject IUserService userService
+@layout LoginLayout
 
     <EditForm Model="@user" OnValidSubmit="@RegisterUser">
         <div>
